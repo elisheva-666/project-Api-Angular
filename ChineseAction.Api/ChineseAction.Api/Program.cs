@@ -3,31 +3,27 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+// הוספת השירותים הנדרשים
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
-// משיכת מחרוזת החיבור מהקובץ שהגדרנו קודם
+// חיבור ל-DB
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-// רישום ה-DbContext בתוך ה-Services של ה-API
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// הפעלת Swagger - בלי תנאים, שפשוט יעלה
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.MapOpenApi();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "V1");
+    c.RoutePrefix = string.Empty; // זה יגרום לזה להיפתח ישר בדף הבית!
+});
 
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

@@ -18,7 +18,9 @@ namespace ChineseAction.Api.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Winner> Winners { get; set; }
-        
+        public DbSet<Category> Categories { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // 1. קשר בין תורם למתנה (One-to-Many)

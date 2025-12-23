@@ -1,4 +1,6 @@
-﻿namespace ChineseAction.Api.NewFolder
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ChineseAction.Api.NewFolder
 {
     public class OrderItem
     {
@@ -9,6 +11,7 @@
         public int OrderId { get; set; }
         public Order Order { get; set; }
 
+        [Range(1,20)]
         public int Quantity { get; set; } 
     }
 }

@@ -11,6 +11,6 @@
         public int PurchaserId { get; set; }
         public Purchaser Purchaser { get; set; }
 
-        public ICollection<OrderItem> OrderItems { get; set; }
+        public ICollection<OrderItem> OrderItems { get; set; }=new List<OrderItem>();
     }
 }
