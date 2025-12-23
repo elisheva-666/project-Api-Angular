@@ -1,3 +1,5 @@
+using ChineseAction.Api.NewFolder;
+
 namespace ChineseAction.Api.DTOs
 {
     public class DonorDto
@@ -16,7 +18,7 @@ namespace ChineseAction.Api.DTOs
 
     }
     public class AddGiftToDonorDTO {
-        public int DonorId { get; set; }
-        public int n { get; set; }
+        public string Email { get; set; }
+        //public GiftDTO  Giftdto { get; set; }
     }
 }

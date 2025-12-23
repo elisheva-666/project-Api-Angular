@@ -1,29 +1,32 @@
-using ChineseAction.Api.Data;
 using Microsoft.EntityFrameworkCore;
+using ChineseAction.Api.Data;
+using ChineseAction.Api.Repository;
+using ChineseAction.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// הוספת השירותים הנדרשים
-builder.Services.AddControllers();
+// DbContext
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// רישום שכבות - Scoped (מתאים ל-DbContext)
+builder.Services.AddScoped<IGiftRepository, GiftRepository>();
+builder.Services.AddScoped<IGiftService, GiftService>();
+
+// Swagger / OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// חיבור ל-DB
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
-
+builder.Services.AddControllers();
 var app = builder.Build();
 
-// הפעלת Swagger - בלי תנאים, שפשוט יעלה
+// Swagger middleware
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "V1");
-    c.RoutePrefix = string.Empty; // זה יגרום לזה להיפתח ישר בדף הבית!
+    c.RoutePrefix = string.Empty; // אופציונלי: Swagger UI ב־/ במקום /swagger
 });
 
-app.UseHttpsRedirection();
 app.MapControllers();
-
 app.Run();
