@@ -1,4 +1,4 @@
-using ChineseAction.Api.NewFolder;
+using ChineseAction.Api.Model;
 using ChineseAction.Api.Servies;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,11 +12,38 @@ public class GiftController : ControllerBase
     {
         _giftService = service;
     }
-
+    //מחזיר את כל המתנות
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Gift>>> GetAllGift()
     {
         var gifts = await _giftService.GetAllGift();
         return Ok(gifts);
+    }
+
+    [HttpGet("sorted")]
+    public async Task<ActionResult<IEnumerable<Gift>>> GetSortedGifts([FromQuery] string? sortBy)
+    {
+        // קריאה לשירות לקבלת רשימת מתנות ממוין לפי הפרמטר שנשלח
+        var gifts = await _giftService.GetSortedGiftsAsync(sortBy);
+        return Ok(gifts);
+    }
+
+    //מחיקת מתנה תורם  
+    [HttpDelete]
+    public async Task<ActionResult> DeleteGift(int id)
+    {
+        var result = await _giftService.DeleteGift(id);
+        if (!result)
+        {
+            return NotFound();
+        }
+        return NoContent();
+    }
+    //הוספת מתנה לתורם
+    [HttpPost]
+    public async Task<ActionResult<Gift>> AddGift(Gift gift)
+    {
+        var createdGift = await _giftService.AddGift(gift);
+        return CreatedAtAction(nameof(GetAllGift), new { id = createdGift.Id }, createdGift);
     }
 }

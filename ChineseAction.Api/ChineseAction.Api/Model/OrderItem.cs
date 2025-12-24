@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ChineseAction.Api.NewFolder
+namespace ChineseAction.Api.Model
 {
     public class OrderItem
     {

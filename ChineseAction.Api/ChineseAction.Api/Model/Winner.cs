@@ -1,4 +1,4 @@
-﻿namespace ChineseAction.Api.NewFolder
+﻿namespace ChineseAction.Api.Model
 {
     public class Winner
     {

@@ -1,4 +1,4 @@
-﻿using ChineseAction.Api.NewFolder;
+﻿using ChineseAction.Api.Model;
 using System.ComponentModel.DataAnnotations;
 
 namespace ChineseAction.Api.DTOs

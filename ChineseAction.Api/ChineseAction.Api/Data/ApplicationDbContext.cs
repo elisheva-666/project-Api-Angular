@@ -1,4 +1,4 @@
-﻿using ChineseAction.Api.NewFolder;
+﻿using ChineseAction.Api.Model;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
