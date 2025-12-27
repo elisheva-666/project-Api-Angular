@@ -1,5 +1,6 @@
 using ChineseAction.Api.Model;
 using ChineseAction.Api.Servies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -13,13 +14,14 @@ public class DonorController : ControllerBase
         _donorService = donorService;
     }
 
+    [Authorize(Roles = "manager")]
     [HttpGet("all")]
     public async Task<ActionResult<IEnumerable<Donor>>> GetAllDonors()
     {
         var donors = await _donorService.GetAllDonorsAsync();
         return Ok(donors);
     }
-
+    [Authorize(Roles = "manager")]
     [HttpGet("filter")]
     public async Task<ActionResult<IEnumerable<Donor>>> GetFilteredDonors([FromQuery] string? name, [FromQuery] string? email)
     {
@@ -34,6 +36,7 @@ public class DonorController : ControllerBase
         return Ok(donors);
     }
 
+    [Authorize(Roles = "manager")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDonor(int id)
     {
@@ -45,6 +48,7 @@ public class DonorController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Roles = "manager")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateDonor(int id, [FromBody] Donor donor)
     {
@@ -61,6 +65,7 @@ public class DonorController : ControllerBase
         return Ok(updatedDonor);
     }
 
+    [Authorize(Roles = "manager")]
     [HttpPost]
     public async Task<ActionResult<Donor>> AddDonor([FromBody] Donor donor)
     {

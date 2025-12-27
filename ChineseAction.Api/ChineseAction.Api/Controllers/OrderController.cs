@@ -8,10 +8,19 @@ using Microsoft.AspNetCore.Mvc;
 public class OrderController : ControllerBase
 {
     private readonly IOrderService _orderService;
+    private readonly ILogger<OrderController> _logger; // 1. משתנה ללוגר
 
-    public OrderController(IOrderService orderService)
+    public OrderController(IOrderService orderService, ILogger<OrderController> logger)
     {
         _orderService = orderService;
+        _logger = logger;
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Order>>> GetDraftOrderByPurchaserIdAsync(int purchaserID)
+    {
+        var orders = await _orderService.GetDraftOrderByPurchaserIdAsync(purchaserID);
+        return Ok(orders);
     }
 
     /// <summary>
@@ -25,7 +34,9 @@ public class OrderController : ControllerBase
     {
         try
         {
+            _logger.LogInformation("User {UserId} is trying to add Gift {GiftId} to cart.", dto.PurchaserId, dto.GiftId);
             var order = await _orderService.AddToCartAsync(dto);
+            _logger.LogInformation("Successfully added item to cart for Order ID: {OrderId}", order.Id);
             return Ok(order);
         }
         catch (ArgumentException aex)
@@ -34,7 +45,7 @@ public class OrderController : ControllerBase
         }
         catch (Exception ex)
         {
-            // ניתן לשפר ולהחזיר מידע מפורט יותר או לוג
+            _logger.LogError(ex, "Error occurred while adding to cart for User {UserId}", dto.PurchaserId);
             return StatusCode(500, new { message = ex.Message, stackTrace = ex.StackTrace });
         }
     }

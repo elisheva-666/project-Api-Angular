@@ -10,6 +10,7 @@ public class OrderService : IOrderService
     {
         _orderRepository = orderRepository;
     }
+    
 
     // הוספה לסל: מוצא טיוטה קיימת או יוצר חדשה, ואז מוסיף/מעדכן שורת OrderItem.
     public async Task<Order> AddToCartAsync(AddToCartDto dto)
@@ -67,5 +68,12 @@ public class OrderService : IOrderService
             // אפשר להוסיף לוג כאן אם יש ILogger
             throw;
         }
+
+        
+    }
+    // קבלת הזמנה לפי id של קונה
+    public async Task<Order?> GetDraftOrderByPurchaserIdAsync(int purchaserId)
+    {
+        return await _orderRepository.GetDraftOrderByPurchaserIdAsync(purchaserId);
     }
 }

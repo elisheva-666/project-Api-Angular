@@ -49,4 +49,12 @@ public class OrderRepository : IOrderRepository
         await _context.SaveChangesAsync();
         return item;
     }
+
+    //קבלת הזמנה לפי מזהה
+    public async Task<Order?> GetOrderByIdAsync(int orderId)
+    {
+        return await _context.Orders
+            .Include(o => o.OrderItems)
+            .FirstOrDefaultAsync(o => o.Id == orderId);
+    }
 }

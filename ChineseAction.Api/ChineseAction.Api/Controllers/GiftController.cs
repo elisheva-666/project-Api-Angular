@@ -1,5 +1,6 @@
 using ChineseAction.Api.Model;
 using ChineseAction.Api.Servies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -28,6 +29,7 @@ public class GiftController : ControllerBase
         return Ok(gifts);
     }
 
+    [Authorize(Roles = "manager")]
     //מחיקת מתנה תורם  
     [HttpDelete]
     public async Task<ActionResult> DeleteGift(int id)
@@ -39,6 +41,7 @@ public class GiftController : ControllerBase
         }
         return NoContent();
     }
+    [Authorize(Roles = "manager")]
     //הוספת מתנה לתורם
     [HttpPost]
     public async Task<ActionResult<Gift>> AddGift(Gift gift)
