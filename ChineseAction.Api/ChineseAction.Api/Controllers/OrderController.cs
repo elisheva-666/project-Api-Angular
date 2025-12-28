@@ -49,5 +49,26 @@ public class OrderController : ControllerBase
             return StatusCode(500, new { message = ex.Message, stackTrace = ex.StackTrace });
         }
     }
+    // סיום הזמנה
+    [HttpPost("complete-order")]
+    public async Task<ActionResult> CompleteOrder([FromBody] CompleteOrderDto dto)
+    {
+        try
+        {
+            _logger.LogInformation("User {UserId} is attempting to complete Order {OrderId}.", dto.PurchaserId, dto.OrderId);
+            await _orderService.CompleteOrderAsync(dto);
+            _logger.LogInformation("Order {OrderId} completed successfully.", dto.OrderId);
+            return Ok(new { message = "Order completed successfully." });
+        }
+        catch (ArgumentException aex)
+        {
+            return BadRequest(aex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred while completing Order {OrderId} for User {UserId}", dto.OrderId, dto.PurchaserId);
+            return StatusCode(500, new { message = ex.Message, stackTrace = ex.StackTrace });
+        }
+    }
 }
 

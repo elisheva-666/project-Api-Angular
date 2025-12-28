@@ -9,11 +9,14 @@ using System.Text;
 public class AuthController : ControllerBase
 {
     private readonly IConfiguration _configuration;
+    private readonly ILogger<OrderController> _logger; // 1. משתנה ללוגר
+
     // כאן היית מזריק את ה-DbContext שלך
 
-    public AuthController(IConfiguration configuration)
+    public AuthController(IConfiguration configuration, ILogger<OrderController> logger)
     {
         _configuration = configuration;
+        _logger = logger;
     }
 
     [HttpPost("login")]
@@ -23,7 +26,13 @@ public class AuthController : ControllerBase
         // בפועל: חפש בטבלת משתמשים/מנהלים לפי שם וסיסמה
         if (request.Email != "e0548571666@gmail.com" || request.Password != "123456")
         {
+            _logger.LogInformation("Failed login attempt for user {Email}", request.Email);
             return Unauthorized("שם משתמש או סיסמה שגויים");
+            //כתיבה ללוג 
+
+           
+
+
         }
 
         // 2. יצירת הטוקן
@@ -46,7 +55,9 @@ public class AuthController : ControllerBase
         );
 
         var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-
+        // החזרת הטוקן למשתמש
+        // כתיבה ללוג על הצלחת ההתחברות
+        _logger.LogInformation("User {Email} logged in successfully.", request.Email);
         return Ok(new { token = jwt });
     }
 }

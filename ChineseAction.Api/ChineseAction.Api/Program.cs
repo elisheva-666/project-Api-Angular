@@ -4,8 +4,8 @@ using ChineseAction.Api.Servies; // שים לב שתוקנה כאן שגיאת הכתיב שהייתה קודם
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-//using Microsoft.OpenApi;
-//using Microsoft.OpenApi.Models; // זה ה-Using הקריטי ל-Swagger
+using Microsoft.OpenApi;
+using Microsoft.OpenApi.Models; // זה ה-Using הקריטי ל-Swagger
 using Serilog;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -46,35 +46,35 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    //c.SwaggerDoc("v1", new OpenApiInfo { Title = "ChineseSaleAPI", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ChineseSaleAPI", Version = "v1" });
 
-    //// הגדרת הסכמה (Scheme) לאבטחה - הוספת כפתור "Authorize"
-    //c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    //{
-    //    Description = "JWT Authorization header using the Bearer scheme.\r\n\r\nEnter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
-    //    Name = "Authorization",
-    //    In = ParameterLocation.Header,
-    //    Type = SecuritySchemeType.ApiKey,
-    //    Scheme = "Bearer"
-    //});
+    // הגדרת הסכמה (Scheme) לאבטחה - הוספת כפתור "Authorize"
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme.\r\n\r\nEnter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
 
-    //c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-    //{
-    //    {
-    //        new OpenApiSecurityScheme
-    //        {
-    //            Reference = new OpenApiReference
-    //            {
-    //                Type = ReferenceType.SecurityScheme,
-    //                Id = "Bearer"
-    //            },
-    //            Scheme = "oauth2",
-    //            Name = "Bearer",
-    //            In = ParameterLocation.Header,
-    //        },
-    //        new List<string>()
-    //    }
-    //});
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                },
+                Scheme = "oauth2",
+                Name = "Bearer",
+                In = ParameterLocation.Header,
+            },
+            new List<string>()
+        }
+    });
 });
 
 // 4. הוספת שירותי אימות (JWT Authentication)
@@ -109,6 +109,7 @@ if (app.Environment.IsDevelopment())
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "ChineseSaleAPI V1");
         c.RoutePrefix = string.Empty; // הופך את Swagger לדף הבית
+
     });
 }
 

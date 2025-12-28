@@ -1,3 +1,4 @@
+using ChineseAction.Api.DTOs;
 using ChineseAction.Api.Model;
 
 public interface IOrderRepository
@@ -7,4 +8,14 @@ public interface IOrderRepository
     Task<OrderItem?> GetOrderItemAsync(int orderId, int giftId);
     Task<OrderItem> AddOrderItemAsync(OrderItem item);
     Task<OrderItem> UpdateOrderItemAsync(OrderItem item);
+    //GetOrderByIdAsync
+    Task<OrderItem> UpdateOrderItemAsync(int orderItemId, int newQuantity);
+    Task<Order> GetOrderByIdAsync(int orderId);
+    //UpdateOrderAsync
+    Task<Order> GetOrderByIdAsync(Order order);
+    Task<OrderItem> UpdateOrderAsync(Order item);
+
+
+
+
 }

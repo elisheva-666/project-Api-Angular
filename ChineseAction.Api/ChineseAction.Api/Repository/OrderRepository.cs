@@ -1,4 +1,5 @@
 using ChineseAction.Api.Data;
+using ChineseAction.Api.DTOs;
 using ChineseAction.Api.Model;
 using Microsoft.EntityFrameworkCore;
 
@@ -51,10 +52,30 @@ public class OrderRepository : IOrderRepository
     }
 
     //קבלת הזמנה לפי מזהה
+
     public async Task<Order?> GetOrderByIdAsync(int orderId)
     {
         return await _context.Orders
             .Include(o => o.OrderItems)
             .FirstOrDefaultAsync(o => o.Id == orderId);
     }
+
+  public async Task UpdateOrderAsync(Order order)
+    {
+        _context.Orders.Update(order);
+        await _context.SaveChangesAsync();
+    }
+    public async Task<Order> CompleteOrderAsync(CompleteOrderDto dto)
+    {
+        
+        var order = await GetOrderByIdAsync(dto.OrderId);
+        if (order != null) {
+            order.IsDraft = false;
+            await UpdateOrderAsync(order);
+
+            return order;
+        }
+
+
+
 }
