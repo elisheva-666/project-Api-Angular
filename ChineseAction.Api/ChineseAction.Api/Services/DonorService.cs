@@ -17,6 +17,7 @@ public class DonorService : IDonorService
 
     public async Task<bool> DeleteDonorAsync(int id)
     {
+        _log.Information("Deleting donor with ID: {DonorId}", id);
         return await _donorRepository.DeleteDonorAsync(id);
     }
 

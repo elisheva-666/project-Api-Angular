@@ -7,4 +7,5 @@ public interface IOrderService
     Task<Order> AddToCartAsync(AddToCartDto dto);
 
     Task<Order?> GetDraftOrderByPurchaserIdAsync(int purchaserId);
+    Task<Order> CompleteOrderAsync(CompleteOrderDto dto);
 }

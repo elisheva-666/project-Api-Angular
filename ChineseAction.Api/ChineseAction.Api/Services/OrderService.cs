@@ -76,4 +76,19 @@ public class OrderService : IOrderService
     {
         return await _orderRepository.GetDraftOrderByPurchaserIdAsync(purchaserId);
     }
+
+    public async Task<Order> CompleteOrderAsync(CompleteOrderDto dto)
+    {
+        var order = await _orderRepository.GetOrderByIdAsync(dto.OrderId);
+        if (order == null || order.PurchaserId != dto.PurchaserId || !order.IsDraft)
+        {
+            throw new ArgumentException("Invalid order for completion.");
+        }
+        // סימון ההזמנה כלא טיוטה
+        order.IsDraft = false;
+        // ניתן להוסיף כאן לוגיקה נוספת לסיום ההזמנה (תשלום, עדכון מלאי וכו')
+        // שמירת השינויים
+        await _orderRepository.UpdateOrderAsync(order);
+        return order;
+    }
 }

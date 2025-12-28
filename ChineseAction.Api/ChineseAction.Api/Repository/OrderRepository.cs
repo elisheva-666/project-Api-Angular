@@ -60,22 +60,21 @@ public class OrderRepository : IOrderRepository
             .FirstOrDefaultAsync(o => o.Id == orderId);
     }
 
-  public async Task UpdateOrderAsync(Order order)
+    public async Task UpdateOrderAsync(Order order)
     {
         _context.Orders.Update(order);
         await _context.SaveChangesAsync();
     }
-    public async Task<Order> CompleteOrderAsync(CompleteOrderDto dto)
+    public async Task<OrderItem> UpdateOrderItemAsync(int orderItemId, int newQuantity)
     {
-        
-        var order = await GetOrderByIdAsync(dto.OrderId);
-        if (order != null) {
-            order.IsDraft = false;
-            await UpdateOrderAsync(order);
-
-            return order;
+        var item = await _context.OrderItems.FindAsync(orderItemId);
+        if (item == null)
+        {
+            throw new ArgumentException("Order item not found.");
         }
-
-
-
+        item.Quantity = newQuantity;
+        _context.OrderItems.Update(item);
+        await _context.SaveChangesAsync();
+        return item;
+    }
 }

@@ -50,15 +50,16 @@ public class OrderController : ControllerBase
         }
     }
     // סיום הזמנה
+
     [HttpPost("complete-order")]
-    public async Task<ActionResult> CompleteOrder([FromBody] CompleteOrderDto dto)
+    public async Task<ActionResult<Order>> CompleteOrder([FromBody] CompleteOrderDto dto)
     {
         try
         {
-            _logger.LogInformation("User {UserId} is attempting to complete Order {OrderId}.", dto.PurchaserId, dto.OrderId);
-            await _orderService.CompleteOrderAsync(dto);
-            _logger.LogInformation("Order {OrderId} completed successfully.", dto.OrderId);
-            return Ok(new { message = "Order completed successfully." });
+            _logger.LogInformation("User {UserId} is trying to complete Order {OrderId}.", dto.PurchaserId, dto.OrderId);
+            var order = await _orderService.CompleteOrderAsync(dto);
+            _logger.LogInformation("Successfully completed Order ID: {OrderId}", order.Id);
+            return Ok(order);
         }
         catch (ArgumentException aex)
         {
@@ -70,5 +71,6 @@ public class OrderController : ControllerBase
             return StatusCode(500, new { message = ex.Message, stackTrace = ex.StackTrace });
         }
     }
+
 }
 
